@@ -32,6 +32,9 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost').split(',')
 ALLOWED_HOSTS += ['web-production-a6646.up.railway.app']
 
 
+CSRF_TRUSTED_ORIGINS = ['https://web-production-a6646.up.railway.app']
+
+
 # Application definition
 
 INSTALLED_APPS = [
