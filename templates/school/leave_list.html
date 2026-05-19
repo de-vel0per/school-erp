@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Leave Requests{% endblock %}
+{% block page_title %}Leave Requests{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <p style="color:#6b7280; font-size:14px;">
+        {% if request.user.role == 'teacher' %}
+            Your leave balance:
+            <strong style="color:#4f46e5;">
+                {{ request.user.teacher_profile.leave_balance }} days
+            </strong>
+        {% endif %}
+    </p>
+    {% if request.user.role == 'teacher' %}
+    <a href="{% url 'apply_leave' %}" class="btn btn-primary">+ Apply for Leave</a>
+    {% endif %}
+</div>
+
+{% if leaves %}
+<div class="card">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    {% if request.user.role == 'admin' %}<th>Teacher</th>{% endif %}
+                    <th>Leave Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Days</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Applied On</th>
+                    {% if request.user.role == 'admin' %}<th>Action</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in leaves %}
+                <tr>
+                    {% if request.user.role == 'admin' %}
+                    <td>{{ leave.teacher.user.get_full_name }}</td>
+                    {% endif %}
+                    <td>{{ leave.get_leave_type_display }}</td>
+                    <td>{{ leave.from_date }}</td>
+                    <td>{{ leave.to_date }}</td>
+                    <td>{{ leave.total_days }}</td>
+                    <td style="max-width:200px; color:#6b7280;">{{ leave.reason }}</td>
+                    <td>
+                        {% if leave.status == 'pending' %}
+                            <span class="badge badge-amber">Pending</span>
+                        {% elif leave.status == 'approved' %}
+                            <span class="badge badge-green">Approved</span>
+                        {% else %}
+                            <span class="badge badge-red">Rejected</span>
+                        {% endif %}
+                    </td>
+                    <td style="color:#6b7280; font-size:13px;">
+                        {{ leave.applied_at|date:"d M Y" }}
+                    </td>
+                    {% if request.user.role == 'admin' %}
+                    <td>
+                        {% if leave.status == 'pending' %}
+                        <a href="{% url 'review_leave' leave.id %}"
+                           class="btn btn-primary"
+                           style="font-size:13px; padding:6px 12px;">
+                            Review
+                        </a>
+                        {% else %}
+                        <span style="color:#9ca3af; font-size:13px;">Reviewed</span>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <p style="color:#6b7280; font-size:14px;">
+        No leave requests yet.
+        {% if request.user.role == 'teacher' %}
+        Click "Apply for Leave" to submit one.
+        {% endif %}
+    </p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}My Attendance{% endblock %}
+{% block page_title %}My Attendance{% endblock %}
+
+{% block content %}
+<div class="stats-grid" style="margin-bottom:24px;">
+    <div class="stat-card">
+        <div class="stat-icon blue">📅</div>
+        <div>
+            <div class="stat-value">{{ total }}</div>
+            <div class="stat-label">Total Days</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green">✅</div>
+        <div>
+            <div class="stat-value">{{ present }}</div>
+            <div class="stat-label">Present</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon red">❌</div>
+        <div>
+            <div class="stat-value">{{ absent }}</div>
+            <div class="stat-label">Absent</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber">📊</div>
+        <div>
+            <div class="stat-value">{{ percentage }}%</div>
+            <div class="stat-label">Attendance Rate</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Attendance Records</div>
+    {% if records %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Time In</th>
+                    <th>Verified By</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.date }}</td>
+                    <td>
+                        {% if record.status == 'present' %}
+                            <span class="badge badge-green">✅ Present</span>
+                        {% elif record.status == 'absent' %}
+                            <span class="badge badge-red">❌ Absent</span>
+                        {% else %}
+                            <span class="badge badge-amber">🕐 Late</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ record.time_in|default:"—" }}</td>
+                    <td>
+                        {% if record.biometric_verified %}
+                            <span class="badge badge-purple">🔬 Biometric</span>
+                        {% elif record.marked_by %}
+                            {{ record.marked_by.user.get_full_name }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>{{ record.remarks|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color:#6b7280; font-size:14px;">No attendance records yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

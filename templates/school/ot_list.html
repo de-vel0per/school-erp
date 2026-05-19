@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}OT Requests{% endblock %}
+{% block page_title %}OT Requests{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <p style="color:#6b7280; font-size:14px;">Overtime requests</p>
+    {% if request.user.role == 'teacher' %}
+    <a href="{% url 'apply_ot' %}" class="btn btn-primary">+ Apply for OT</a>
+    {% endif %}
+</div>
+
+{% if ots %}
+<div class="card">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    {% if request.user.role == 'admin' %}<th>Teacher</th>{% endif %}
+                    <th>Date</th>
+                    <th>Hours</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Applied On</th>
+                    {% if request.user.role == 'admin' %}<th>Action</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for ot in ots %}
+                <tr>
+                    {% if request.user.role == 'admin' %}
+                    <td>{{ ot.teacher.user.get_full_name }}</td>
+                    {% endif %}
+                    <td>{{ ot.ot_date }}</td>
+                    <td>{{ ot.hours }} hrs</td>
+                    <td style="max-width:200px; color:#6b7280;">{{ ot.reason }}</td>
+                    <td>
+                        {% if ot.status == 'pending' %}
+                            <span class="badge badge-amber">Pending</span>
+                        {% elif ot.status == 'approved' %}
+                            <span class="badge badge-green">Approved</span>
+                        {% else %}
+                            <span class="badge badge-red">Rejected</span>
+                        {% endif %}
+                    </td>
+                    <td style="color:#6b7280; font-size:13px;">
+                        {{ ot.applied_at|date:"d M Y" }}
+                    </td>
+                    {% if request.user.role == 'admin' %}
+                    <td>
+                        {% if ot.status == 'pending' %}
+                        <a href="{% url 'review_ot' ot.id %}"
+                           class="btn btn-primary"
+                           style="font-size:13px; padding:6px 12px;">
+                            Review
+                        </a>
+                        {% else %}
+                        <span style="color:#9ca3af; font-size:13px;">Reviewed</span>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <p style="color:#6b7280; font-size:14px;">
+        No OT requests yet.
+        {% if request.user.role == 'teacher' %}
+        Click "Apply for OT" to submit one.
+        {% endif %}
+    </p>
+</div>
+{% endif %}
+{% endblock %}

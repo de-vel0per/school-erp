@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}My Results{% endblock %}
+{% block page_title %}My Results{% endblock %}
+
+{% block content %}
+{% if marks %}
+<div class="card">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Exam</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Marks</th>
+                    <th>Grade</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mark in marks %}
+                <tr>
+                    <td>
+                        <a href="{% url 'exam_detail' mark.exam.id %}"
+                           style="color:#4f46e5; text-decoration:none; font-weight:600;">
+                            {{ mark.exam.title }}
+                        </a>
+                    </td>
+                    <td>{{ mark.exam.subject }}</td>
+                    <td>{{ mark.exam.exam_date }}</td>
+                    <td>{{ mark.marks_obtained }} / {{ mark.exam.total_marks }}</td>
+                    <td><span class="badge badge-purple">{{ mark.grade }}</span></td>
+                    <td>
+                        {% if mark.marks_obtained >= mark.exam.pass_marks %}
+                            <span class="badge badge-green">Pass</span>
+                        {% else %}
+                            <span class="badge badge-red">Fail</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <p style="color:#6b7280; font-size:14px;">No results available yet.</p>
+</div>
+{% endif %}
+{% endblock %}

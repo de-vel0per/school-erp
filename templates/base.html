@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}School ERP{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="school-name">🏫 School ERP</div>
+                <div class="school-sub">Management System</div>
+            </div>
+
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    {{ request.user.first_name|first }}{{ request.user.last_name|first }}
+                </div>
+                <div class="user-info">
+                    <div class="user-name">{{ request.user.get_full_name }}</div>
+                    <div class="user-role">{{ request.user.role }}</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <div class="nav-section-label">Main</div>
+                <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <span class="icon">🏠</span> Dashboard
+                </a>
+
+                {% if request.user.role == 'admin' or request.user.role == 'teacher' %}
+                <div class="nav-section-label">Academics</div>
+                <a href="{% url 'exams' %}" class="nav-link">
+                    <span class="icon">📝</span> Exams
+                </a>
+                <a href="{% url 'attendance' %}" class="nav-link">
+                    <span class="icon">✅</span> Attendance
+                </a>
+                <a href="#" class="nav-link">
+                    <span class="icon">📊</span> Marks
+                </a>
+                {% endif %}
+
+                {% if request.user.role == 'student' %}
+                <div class="nav-section-label">My Academics</div>
+                <a href="#" class="nav-link">
+                    <span class="icon">📝</span> My Exams
+                </a>
+                <a href="{% url 'my_attendace' %}" class="nav-link">
+                    <span class="icon">✅</span> My Attendance
+                </a>
+                <a href="{% url 'my_results' %}" class="nav-link">
+                    <span class="icon">📊</span> My Marks
+                </a>
+                {% endif %}
+
+                {% if request.user.role == 'teacher' %}
+                <div class="nav-section-label">HR</div>
+                <a href="{% url 'leave_list' %}" class="nav-link">
+                    <span class="icon">🏖️</span> Leave Requests
+                </a>
+                <a href="{% url 'ot_list' %}" class="nav-link">
+                    <span class="icon">⏰</span> OT Requests
+                </a>
+                {% endif %}
+
+                {% if request.user.role == 'admin' %}
+                <div class="nav-section-label">Management</div>
+                <a href="#" class="nav-link">
+                    <span class="icon">👩‍🏫</span> Teachers
+                </a>
+                <a href="#" class="nav-link">
+                    <span class="icon">👨‍🎓</span> Students
+                </a>
+                <a href="{% url 'leave_list' %}" class="nav-link">
+                    <span class="icon">🏖️</span> Leave Approvals
+                </a>
+                <a href="{% url 'ot_list' %}" class="nav-link">
+                    <span class="icon">⏰</span> OT Approvals
+                </a>
+                {% endif %}
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="{% url 'logout' %}">
+                    <span>🚪</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main area -->
+        <div class="main">
+            <div class="topbar">
+                <div class="page-title">{% block page_title %}Dashboard{% endblock %}</div>
+                <div class="topbar-right">{{ request.user.get_full_name }}</div>
+            </div>
+
+            <div class="content">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+    </div>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

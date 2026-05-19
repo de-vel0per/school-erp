@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Review Leave{% endblock %}
+{% block page_title %}Review Leave Request{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-bottom:24px;">
+    <div class="card-title">Leave Details</div>
+    <table style="font-size:14px; width:100%;">
+        <tr>
+            <td style="padding:8px 0; color:#6b7280; width:160px;">Teacher</td>
+            <td><strong>{{ leave.teacher.user.get_full_name }}</strong></td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0; color:#6b7280;">Department</td>
+            <td>{{ leave.teacher.department }}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0; color:#6b7280;">Leave Type</td>
+            <td>{{ leave.get_leave_type_display }}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0; color:#6b7280;">From Date</td>
+            <td>{{ leave.from_date }}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0; color:#6b7280;">To Date</td>
+            <td>{{ leave.to_date }}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0; color:#6b7280;">Total Days</td>
+            <td><strong>{{ leave.total_days }} day(s)</strong></td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0; color:#6b7280;">Current Balance</td>
+            <td>{{ leave.teacher.leave_balance }} days</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0; color:#6b7280;">Reason</td>
+            <td>{{ leave.reason }}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0; color:#6b7280;">Applied On</td>
+            <td>{{ leave.applied_at|date:"d M Y — h:i A" }}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-title">Your Decision</div>
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label class="form-label">Admin Remarks (optional)</label>
+            <textarea name="admin_remarks" class="form-control" rows="3"
+                      placeholder="Add any remarks for the teacher..."></textarea>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:8px;">
+            <button type="submit" name="action" value="approve" class="btn btn-primary">
+                ✅ Approve Leave
+            </button>
+            <button type="submit" name="action" value="reject" class="btn btn-danger">
+                ❌ Reject Leave
+            </button>
+            <a href="{% url 'leave_list' %}" class="btn btn-secondary">← Back</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

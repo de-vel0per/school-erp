@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block page_title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon purple">👩‍🏫</div>
+        <div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">Total Teachers</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon blue">👨‍🎓</div>
+        <div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">Total Students</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber">🏖️</div>
+        <div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">Pending Leaves</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green">📝</div>
+        <div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">Total Exams</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Welcome to School ERP</div>
+    <p style="color: #6b7280; font-size: 14px;">
+        Use the sidebar to manage teachers, students, exams, attendance, leaves and OT requests.
+    </p>
+</div>
+{% endblock %}

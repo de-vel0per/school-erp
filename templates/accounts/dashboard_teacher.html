@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Teacher Dashboard{% endblock %}
+{% block page_title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon purple">📝</div>
+        <div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">My Exams</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green">🏖️</div>
+        <div>
+            <div class="stat-value">20</div>
+            <div class="stat-label">Leave Balance</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber">⏰</div>
+        <div>
+            <div class="stat-value">0</div>
+            <div class="stat-label">Pending OTs</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Welcome back, {{ request.user.first_name }}!</div>
+    <p style="color: #6b7280; font-size: 14px;">
+        Use the sidebar to manage your exams, mark attendance, upload marks and apply for leave.
+    </p>
+</div>
+{% endblock %}

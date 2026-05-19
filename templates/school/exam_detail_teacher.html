@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load school_filters %}
+{% block title %}{{ exam.title }}{% endblock %}
+{% block page_title %}Exam Detail{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-bottom:24px;">
+    <div style="display:flex; justify-content:space-between; align-items:start;">
+        <div>
+            <div class="card-title">{{ exam.title }}</div>
+            <p style="color:#6b7280; font-size:14px; margin-bottom:6px;">
+                {{ exam.subject }} — Class {{ exam.class_name }} {{ exam.section }}
+            </p>
+            <p style="color:#6b7280; font-size:14px;">
+                Date: {{ exam.exam_date }} &nbsp;|&nbsp;
+                Duration: {{ exam.duration_mins }} mins &nbsp;|&nbsp;
+                Total Marks: {{ exam.total_marks }} &nbsp;|&nbsp;
+                Pass Marks: {{ exam.pass_marks }}
+            </p>
+            {% if exam.instructions %}
+            <p style="margin-top:10px; font-size:14px; color:#374151;">
+                <strong>Instructions:</strong> {{ exam.instructions }}
+            </p>
+            {% endif %}
+        </div>
+        <div style="display:flex; gap:8px;">
+            <a href="{% url 'upload_marks' exam.id %}" class="btn btn-primary">Upload Marks</a>
+            <a href="{% url 'exams' %}" class="btn btn-secondary">← Back</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Student Results</div>
+    {% if students %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll No</th>
+                    <th>Student Name</th>
+                    <th>Marks Obtained</th>
+                    <th>Grade</th>
+                    <th>Result</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.roll_number }}</td>
+                    <td>{{ student.user.get_full_name }}</td>
+                    {% if student.id in students_with_marks %}
+                        {% with mark=students_with_marks|get_item:student.id %}
+                        <td>{{ mark.marks_obtained }} / {{ exam.total_marks }}</td>
+                        <td><span class="badge badge-purple">{{ mark.grade }}</span></td>
+                        <td>
+                            {% if mark.marks_obtained >= exam.pass_marks %}
+                                <span class="badge badge-green">Pass</span>
+                            {% else %}
+                                <span class="badge badge-red">Fail</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ mark.remarks|default:"—" }}</td>
+                        {% endwith %}
+                    {% else %}
+                        <td colspan="4" style="color:#9ca3af;">Not uploaded yet</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color:#6b7280; font-size:14px;">No students found in this class.</p>
+    {% endif %}
+</div>
+{% endblock %}

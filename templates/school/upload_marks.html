@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load school_filters %}
+{% block title %}Upload Marks{% endblock %}
+{% block page_title %}Upload Marks{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <div>
+            <div class="card-title" style="margin-bottom:4px;">{{ exam.title }}</div>
+            <p style="color:#6b7280; font-size:14px;">
+                {{ exam.subject }} — Class {{ exam.class_name }} {{ exam.section }} &nbsp;|&nbsp;
+                Total Marks: {{ exam.total_marks }}
+            </p>
+        </div>
+        <a href="{% url 'exam_detail' exam.id %}" class="btn btn-secondary">← Back</a>
+    </div>
+
+    {% if students %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Student Name</th>
+                        <th>Marks (out of {{ exam.total_marks }})</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.roll_number }}</td>
+                        <td>{{ student.user.get_full_name }}</td>
+                        <td>
+                            <input type="number"
+                                   name="marks_{{ student.id }}"
+                                   class="form-control"
+                                   style="width:120px; padding:6px 10px;"
+                                   min="0"
+                                   max="{{ exam.total_marks }}"
+                                   step="0.5"
+                                   placeholder="0"
+                                   value="{% if student.id in existing_marks %}{{ existing_marks|get_item:student.id.marks_obtained }}{% endif %}">
+                        </td>
+                        <td>
+                            <input type="text"
+                                   name="remarks_{{ student.id }}"
+                                   class="form-control"
+                                   style="width:220px; padding:6px 10px;"
+                                   placeholder="Optional remarks"
+                                   value="{% if student.id in existing_marks %}{{ existing_marks|get_item:student.id.remarks }}{% endif %}">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top:20px;">
+            <button type="submit" class="btn btn-primary">💾 Save Marks</button>
+        </div>
+    </form>
+    {% else %}
+    <p style="color:#6b7280; font-size:14px;">No students found in this class.</p>
+    {% endif %}
+</div>
+{% endblock %}

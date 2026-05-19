@@ -1,0 +1,17 @@
+# environment
+.env
+venv/
+
+# database
+*.sqlite3
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+
+# media uploads
+media/
+
+# static collected
+staticfiles/

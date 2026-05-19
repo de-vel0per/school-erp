@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Exams{% endblock %}
+{% block page_title %}Exams{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <p style="color:#6b7280; font-size:14px;">Manage and view all exams</p>
+    <a href="{% url 'create_exam' %}" class="btn btn-primary">+ Create Exam</a>
+</div>
+
+{% if exams %}
+<div class="card">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Subject</th>
+                    <th>Class</th>
+                    <th>Date</th>
+                    <th>Total Marks</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exam in exams %}
+                <tr>
+                    <td><strong>{{ exam.title }}</strong></td>
+                    <td>{{ exam.subject }}</td>
+                    <td>{{ exam.class_name }} — {{ exam.section }}</td>
+                    <td>{{ exam.exam_date }}</td>
+                    <td>{{ exam.total_marks }}</td>
+                    <td>
+                        {% if exam.status == 'scheduled' %}
+                            <span class="badge badge-blue">Scheduled</span>
+                        {% elif exam.status == 'ongoing' %}
+                            <span class="badge badge-amber">Ongoing</span>
+                        {% else %}
+                            <span class="badge badge-green">Completed</span>
+                        {% endif %}
+                    </td>
+                    <td style="display:flex; gap:8px;">
+                        <a href="{% url 'exam_detail' exam.id %}" class="btn btn-secondary" style="font-size:13px; padding:6px 12px;">
+                            View
+                        </a>
+                        <a href="{% url 'upload_marks' exam.id %}" class="btn btn-primary" style="font-size:13px; padding:6px 12px;">
+                            Upload Marks
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <p style="color:#6b7280; font-size:14px;">No exams yet. Click "Create Exam" to get started.</p>
+</div>
+{% endif %}
+{% endblock %}

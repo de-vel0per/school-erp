@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Mark Attendance{% endblock %}
+{% block page_title %}Mark Attendance{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <div>
+            <div class="card-title" style="margin-bottom:4px;">
+                Class {{ class_name }} — Section {{ section }}
+            </div>
+            <p style="color:#6b7280; font-size:14px;">Date: {{ selected_date }}</p>
+        </div>
+        <a href="{% url 'attendance' %}" class="btn btn-secondary">← Back</a>
+    </div>
+
+    {% if students %}
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="class_name" value="{{ class_name }}">
+        <input type="hidden" name="section" value="{{ section }}">
+        <input type="hidden" name="date" value="{{ selected_date }}">
+
+        <!-- quick mark all buttons -->
+        <div style="margin-bottom:16px; display:flex; gap:10px;">
+            <button type="button" class="btn btn-secondary" onclick="markAll('present')">
+                ✅ Mark All Present
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="markAll('absent')">
+                ❌ Mark All Absent
+            </button>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Student Name</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.roll_number }}</td>
+                        <td>{{ student.user.get_full_name }}</td>
+                        <td>
+                            <select name="status_{{ student.id }}" class="form-control status-select"
+                                    style="width:140px; padding:6px 10px;">
+                                <option value="present"
+                                    {% if student.id in existing and existing|get_item:student.id.status == 'present' %}selected{% endif %}>
+                                    ✅ Present
+                                </option>
+                                <option value="absent"
+                                    {% if student.id in existing and existing|get_item:student.id.status == 'absent' %}selected{% endif %}>
+                                    ❌ Absent
+                                </option>
+                                <option value="late"
+                                    {% if student.id in existing and existing|get_item:student.id.status == 'late' %}selected{% endif %}>
+                                    🕐 Late
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="remarks_{{ student.id }}"
+                                   class="form-control"
+                                   style="width:200px; padding:6px 10px;"
+                                   placeholder="Optional remarks"
+                                   value="{% if student.id in existing %}{{ existing|get_item:student.id.remarks }}{% endif %}">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top:20px;">
+            <button type="submit" class="btn btn-primary">💾 Save Attendance</button>
+        </div>
+    </form>
+    {% else %}
+    <p style="color:#6b7280; font-size:14px;">No students found in this class.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function markAll(status) {
+        document.querySelectorAll('.status-select').forEach(select => {
+            select.value = status;
+        });
+    }
+</script>
+{% endblock %}

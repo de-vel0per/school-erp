@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Attendance{% endblock %}
+{% block page_title %}Attendance{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <div>
+        <p style="color:#6b7280; font-size:14px;">Today: {{ today }}</p>
+    </div>
+</div>
+
+{% if class_stats %}
+<div class="card">
+    <div class="card-title">Classes</div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Total Students</th>
+                    <th>Present</th>
+                    <th>Absent</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in class_stats %}
+                <tr>
+                    <td><strong>{{ c.class_name }}</strong></td>
+                    <td>{{ c.section }}</td>
+                    <td>{{ c.total }}</td>
+                    <td><span class="badge badge-green">{{ c.present }}</span></td>
+                    <td><span class="badge badge-red">{{ c.absent }}</span></td>
+                    <td>
+                        <a href="{% url 'mark_attendance' %}?class_name={{ c.class_name }}&section={{ c.section }}&date={{ today }}"
+                           class="btn btn-primary" style="font-size:13px; padding:6px 12px;">
+                            Mark Attendance
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <p style="color:#6b7280; font-size:14px;">No classes found. Add students first to see classes here.</p>
+</div>
+{% endif %}
+{% endblock %}
