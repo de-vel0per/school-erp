@@ -51,15 +51,12 @@
                             <select name="status_{{ student.id }}" class="form-control status-select"
                                     style="width:140px; padding:6px 10px;">
                                 <option value="present"
-                                    {% if student.id in existing and existing|get_item:student.id.status == 'present' %}selected{% endif %}>
-                                    ✅ Present
+                                   ✅ Present
                                 </option>
                                 <option value="absent"
-                                    {% if student.id in existing and existing|get_item:student.id.status == 'absent' %}selected{% endif %}>
                                     ❌ Absent
                                 </option>
                                 <option value="late"
-                                    {% if student.id in existing and existing|get_item:student.id.status == 'late' %}selected{% endif %}>
                                     🕐 Late
                                 </option>
                             </select>
@@ -69,7 +66,6 @@
                                    class="form-control"
                                    style="width:200px; padding:6px 10px;"
                                    placeholder="Optional remarks"
-                                   value="{% if student.id in existing %}{{ existing|get_item:student.id.remarks }}{% endif %}">
                         </td>
                     </tr>
                     {% endfor %}
