@@ -110,7 +110,12 @@ def mark_attendance_view(request):
         class_name = request.POST.get('class_name')
         section = request.POST.get('section')
         date_str = request.POST.get('date')
-        selected_date = timezone.datetime.strptime(date_str, '%Y-%m-%d').date()
+        
+        try:
+            selected_date = timezone.datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            from django.utils.dateparse import parse_date
+            selected_date = parse_date(date_str) or timezone.now().date()
 
         students = Student.objects.filter(class_name=class_name, section=section)
 
