@@ -7,29 +7,42 @@
     <div class="stat-card">
         <div class="stat-icon purple">👩‍🏫</div>
         <div>
-            <div class="stat-value">0</div>
+            <div class="stat-value">{{ data.teacher_count}}</div>
             <div class="stat-label">Total Teachers</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon blue">👨‍🎓</div>
         <div>
-            <div class="stat-value">0</div>
+            <div class="stat-value">{{ data.student_count}}</div>
             <div class="stat-label">Total Students</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon amber">🏖️</div>
         <div>
-            <div class="stat-value">0</div>
+            <div class="stat-value">{{ data.pending_leaves}}</div>
             <div class="stat-label">Pending Leaves</div>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-icon green">📝</div>
         <div>
-            <div class="stat-value">0</div>
+            <div class="stat-value">{{ data.exam_count }}</div>
             <div class="stat-label">Total Exams</div>
+        </div>
+	<div class="stat-card">
+        <div class="stat-icon blue">✅</div>
+        <div>
+            <div class="stat-value">{{ data.today_attendance }}</div>
+            <div class="stat-label">Present Today</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon red">⏰</div>
+        <div>
+            <div class="stat-value">{{ data.pending_ots }}</div>
+            <div class="stat-label">Pending OTs</div>
         </div>
     </div>
 </div>
