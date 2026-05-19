@@ -46,7 +46,7 @@ def dashboard_view(request):
         
         data = {
             'teacher_count': Teacher.objects.count(),
-            'student_count': Student.objecs.count(),
+            'student_count': Student.objects.count(),
             'pending_leaves': LeaveRequest.objects.filter(status='pending').count(),
             'pending_ots': OTRequest.objects.filter(status='pending').count(),
             'today_attendance': Attendance.objects.filter(date=timezone.now().date()).count(),        
@@ -66,8 +66,9 @@ def dashboard_view(request):
         }
         return render(request, 'accounts/dashboard_teacher.html', {'data': data})
         
-    
-
+    elif role == 'student':
+        from school.models import Attendance, Exam, Mark
+        from django.utils import timezone
         student = user.student_profile
         total = Attendance.objects.filter(student=student).count()
         present = Attendance.objects.filter(student=student, status='present').count()
