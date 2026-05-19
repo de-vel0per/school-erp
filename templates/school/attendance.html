@@ -33,7 +33,7 @@
                     <td><span class="badge badge-green">{{ c.present }}</span></td>
                     <td><span class="badge badge-red">{{ c.absent }}</span></td>
                     <td>
-                        <a href="{% url 'mark_attendance' %}?class_name={{ c.class_name }}&section={{ c.section }}&date={{ today }}"
+                        <a href="{% url 'mark_attendance' %}?class_name={{ c.class_name }}&section={{ c.section }}&date={{ today|date:"Y-m-d" }}"
                            class="btn btn-primary" style="font-size:13px; padding:6px 12px;">
                             Mark Attendance
                         </a>
