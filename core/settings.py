@@ -29,12 +29,11 @@ SECRET_KEY = 'django-insecure-%c%gykh8^q*sfz$__6^udr$3+w2zx_9q%k=!1g!38m&@k=-*l0
 DEBUG = True
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost').split(',')
-ALLOWED_HOSTS += ['web-production-a6646.up.railway.app']
-ALLOWED_HOSTS += ['sitara-school.up.railway.app']
+ALLOWED_HOSTS += ['web-production-28b49.up.railway.app']
 
 
-CSRF_TRUSTED_ORIGINS = ['https://web-production-a6646.up.railway.app',
-                        'https://sitara-school.up.railway.app']
+
+CSRF_TRUSTED_ORIGINS = ['https://web-production-28b49.up.railway.app']
 
 
 # Application definition
