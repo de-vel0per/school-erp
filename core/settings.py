@@ -33,8 +33,8 @@ ALLOWED_HOSTS += ['web-production-a6646.up.railway.app']
 ALLOWED_HOSTS += ['sitara-school.up.railway.app']
 
 
-CSRF_TRUSTED_ORIGINS = ['https://web-production-a6646.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['https://sitara-school.up.railway.app]
+CSRF_TRUSTED_ORIGINS = ['https://web-production-a6646.up.railway.app',
+                        'https://sitara-school.up.railway.app']
 
 
 # Application definition
